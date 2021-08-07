@@ -60,3 +60,39 @@ func MaxDiffCompute() Hooks {
 		},
 	}
 }
+
+// the above version which works on a record by record is derived
+// from the below code I came up with which works on an array as input:
+
+/*
+type Result struct {
+	Delta      int
+	StartIndex int
+	EndIndex   int
+}
+
+func maxDiff(points []int) (*Result, error) {
+	if len(points) < 2 {
+		return nil, errors.New("Insufficient number of records")
+	}
+
+	maxDiff := points[1] - points[0]
+	min := points[0]
+	result := &Result{StartIndex: 0, EndIndex: 1}
+	currentMinIndex := 0
+
+	for i := 1; i < len(points); i++ {
+		if points[i]-min > maxDiff {
+			maxDiff = points[i] - min
+			result.StartIndex = currentMinIndex
+			result.EndIndex = i
+			result.Delta = maxDiff
+		}
+		if points[i] < min {
+			min = points[i]
+			currentMinIndex = i
+		}
+	}
+	return result, nil
+}
+*/
