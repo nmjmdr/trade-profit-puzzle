@@ -30,5 +30,5 @@ func main() {
 		fmt.Println("Error: ", err)
 	}
 	duration := time.Since(start)
-	fmt.Printf("Time taken to process %d input records: %#v milliseconds, or %v nanoseconds per record", Max, duration.Microseconds(), duration.Nanoseconds()/Max)
+	fmt.Printf("Time taken to process %d input records: %#v millseconds, or %v nanoseconds per record", Max, duration.Milliseconds(), duration.Nanoseconds()/Max)
 }
