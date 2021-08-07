@@ -18,23 +18,23 @@ func Test_InvokesHooksAndReturnsTradeOnEnd(t *testing.T) {
 `
 	csv := csv.NewReader(strings.NewReader(records))
 
-	expectedTrade := &types.Trade{
-		BuyPoint:  &types.Point{Price: types.Cents(10), Ticks: types.Ticks(1257894000000000000)},
-		SellPoint: &types.Point{Price: types.Cents(11), Ticks: types.Ticks(1257894000000000001)},
+	expectedTrade := &types.Transaction{
+		Buy:  &types.TradeRecord{Price: types.Cents(10), Ticks: types.Ticks(1257894000000000000)},
+		Sell: &types.TradeRecord{Price: types.Cents(11), Ticks: types.Ticks(1257894000000000001)},
 	}
 
-	pointsReceived := []*types.Point{}
+	pointsReceived := []*types.TradeRecord{}
 
 	trade, err := service.MaxProfit(csv, func() maxdiff.Hooks {
 		return maxdiff.Hooks{
-			DataPoint: func(pt *types.Point) error {
+			DataPoint: func(pt *types.TradeRecord) error {
 				pointsReceived = append(pointsReceived, pt)
 				return nil
 			},
-			End: func() (*types.Trade, error) {
-				return &types.Trade{
-					BuyPoint:  pointsReceived[0],
-					SellPoint: pointsReceived[1],
+			End: func() (*types.Transaction, error) {
+				return &types.Transaction{
+					Buy:  pointsReceived[0],
+					Sell: pointsReceived[1],
 				}, nil
 			},
 		}
@@ -51,18 +51,18 @@ func Test_CSVParseError(t *testing.T) {
 `
 	csv := csv.NewReader(strings.NewReader(records))
 
-	pointsReceived := []*types.Point{}
+	pointsReceived := []*types.TradeRecord{}
 
 	_, err := service.MaxProfit(csv, func() maxdiff.Hooks {
 		return maxdiff.Hooks{
-			DataPoint: func(pt *types.Point) error {
+			DataPoint: func(pt *types.TradeRecord) error {
 				pointsReceived = append(pointsReceived, pt)
 				return nil
 			},
-			End: func() (*types.Trade, error) {
-				return &types.Trade{
-					BuyPoint:  pointsReceived[0],
-					SellPoint: pointsReceived[1],
+			End: func() (*types.Transaction, error) {
+				return &types.Transaction{
+					Buy:  pointsReceived[0],
+					Sell: pointsReceived[1],
 				}, nil
 			},
 		}

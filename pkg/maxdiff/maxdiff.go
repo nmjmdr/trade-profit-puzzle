@@ -8,91 +8,55 @@ import (
 var NotEnoughDataErr = errors.New("Not emough data points to compute max difference")
 
 type Hooks struct {
-	DataPoint func(*types.Point) error
-	End       func() (*types.Trade, error)
+	DataPoint func(*types.TradeRecord) error
+	End       func() (*types.Transaction, error)
 }
 
 func MaxDiffCompute() Hooks {
-	firstTwo := []*types.Point{}
+	firstTwo := []*types.TradeRecord{}
 	var maxDiff types.Cents
 	var min types.Cents
 	initialised := false
 
-	trade := &types.Trade{}
-	var minPoint *types.Point
+	tr := &types.Transaction{}
+	var minRecord *types.TradeRecord
 
 	return Hooks{
-		DataPoint: func(point *types.Point) error {
+		DataPoint: func(record *types.TradeRecord) error {
 			if !initialised {
-				firstTwo = append(firstTwo, point)
+				firstTwo = append(firstTwo, record)
 				if len(firstTwo) == 2 {
 					maxDiff = firstTwo[1].Price - firstTwo[0].Price
 					min = firstTwo[0].Price
 
-					trade.BuyPoint = firstTwo[0]
-					trade.SellPoint = firstTwo[1]
-					trade.Delta = maxDiff
+					tr.Buy = firstTwo[0]
+					tr.Sell = firstTwo[1]
+					tr.Profit = maxDiff
 
 					initialised = true
 				}
 			}
 
 			if initialised {
-				if (point.Price - min) > maxDiff {
-					maxDiff = point.Price - min
+				if (record.Price - min) > maxDiff {
+					maxDiff = record.Price - min
 
-					trade.SellPoint = point
-					trade.BuyPoint = minPoint
-					trade.Delta = maxDiff
+					tr.Sell = record
+					tr.Buy = minRecord
+					tr.Profit = maxDiff
 				}
-				if point.Price < min {
-					min = point.Price
-					minPoint = point
+				if record.Price < min {
+					min = record.Price
+					minRecord = record
 				}
 			}
 			return nil
 		},
-		End: func() (*types.Trade, error) {
+		End: func() (*types.Transaction, error) {
 			if !initialised {
 				return nil, NotEnoughDataErr
 			}
-			return trade, nil
+			return tr, nil
 		},
 	}
 }
-
-// the above version which works on a record by record is derived
-// from the below code I came up with which works on an array as input:
-
-/*
-type Result struct {
-	Delta      int
-	StartIndex int
-	EndIndex   int
-}
-
-func maxDiff(points []int) (*Result, error) {
-	if len(points) < 2 {
-		return nil, errors.New("Insufficient number of records")
-	}
-
-	maxDiff := points[1] - points[0]
-	min := points[0]
-	result := &Result{StartIndex: 0, EndIndex: 1}
-	currentMinIndex := 0
-
-	for i := 1; i < len(points); i++ {
-		if points[i]-min > maxDiff {
-			maxDiff = points[i] - min
-			result.StartIndex = currentMinIndex
-			result.EndIndex = i
-			result.Delta = maxDiff
-		}
-		if points[i] < min {
-			min = points[i]
-			currentMinIndex = i
-		}
-	}
-	return result, nil
-}
-*/
