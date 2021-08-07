@@ -1,0 +1,54 @@
+# Generic
+vendor
+.tmp
+tmp
+*.log
+*.coverprofile
+coverage.out
+*.dump
+.idea/
+node_modules
+.npmrc
+glide.lock
+package-lock.json
+resources/swagger.json
+output/
+tools/bin
+.vscode/
+certs/
+local.*
+*.local
+.env
+local/
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+todo
+
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# mac
+.DS_Store
+
+# Other
+openapi3-gen/
+
+# mongo docker compose data dir
+data
+
+#serverless files
+.serverless/
+
+#bin dir
+bin/
+.secrets
+tmp/
+local/
+local.*
