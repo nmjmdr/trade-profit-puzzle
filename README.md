@@ -168,6 +168,6 @@ Using stream approach
 ```
 
 The stream approach takes:
-2944384386 - 2633286822 = 311,097,564 nanoseconds = 311 milliseconds 
+2944384386 - 2633286822 = 311,097,564 nanoseconds = 311 milliseconds less
 
 _The stream approach took 311 milliseconds less than the array approach to process the file of 10 million records_
