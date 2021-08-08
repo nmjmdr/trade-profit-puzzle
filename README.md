@@ -69,6 +69,18 @@ Running the sample file:
 Using the stream option:
 `app -file ./cmd/app/sample.csv -stream`
 
+Sample output:
+```
+./app -file "../../../../generate-sample/large-sample.csv" -stream
+Maximum possible profit:
+        Transacton is at profit of: 9999999 cents
+        Transaction details:
+                Buy at price 100 cents and ticks 1
+                Sell at price 10000099 cents and ticks 10000000
+
+Using stream approach
+        Time take to process: 2738427969 nanoseconcs
+```
 
 ## Algorithm
 The problem can be reduced to the problem of finding maximum difference between two elements of an array. Given the following constraints:
