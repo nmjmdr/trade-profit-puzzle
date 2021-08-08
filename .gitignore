@@ -27,6 +27,7 @@ local/
 *.so
 *.dylib
 todo
+./app
 
 # Test binary, build with `go test -c`
 *.test
@@ -52,4 +53,5 @@ bin/
 tmp/
 local/
 local.*
+
 
