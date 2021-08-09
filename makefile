@@ -5,4 +5,4 @@ bench:
 build:
 	go build ./cmd/app
 clean:
-	rm -f app
+	rm -f ./app
